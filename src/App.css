@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anaheim:wght@400..800&display=swap');
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #E8DBFF;
+}
+
+.app-background {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.bg-svg {
+  position: absolute;
+  top: 39%;
+  transform: translateY(-50%);
+  width: 30%;    /* size of each SVG */
+  z-index: -1;    /* behind content */
+  animation: spin 60s linear infinite;
+}
+
+.bg-svg.left {
+  left: -5vw;     /* slightly off-screen left */
+  animation-duration: 50s;
+}
+
+.bg-svg.center {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-direction: reverse;
+}
+
+.bg-svg.right {
+  right: -5vw;    /* slightly off-screen right */
+  animation-duration: 40s;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;         /* horizontal centering */
+  justify-content: flex-start; /* stick content to top */
+  padding-top: -10px;           /* move title closer to top */
+  min-height: 100vh;
+  text-align: center;
+  color: #000;                 /* text color */
+}
+
+.home-title,
+.home-title span {
+  font-family: 'Oswald', sans-serif !important;
+  font-size: 5rem;
+  font-weight: 500;
+  padding-top: -10px;
+}
+
+.home-title span {
+  display: inline-block; /* needed for translateY to work */
+  opacity: 0;
+}
+
+.page-container {
+  font-family: 'Anaheim', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #000; /* or whatever text color you want */
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  width: 80%;
+  margin: 2rem auto;
+}
+
+.virus-svg {
+  position: absolute;
+  width: 7vw;                  /* adjust size */
+  animation: floatUpDown 2s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+@keyframes floatUpDown {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-20px);  /* move up 20px */
+  }
+}
