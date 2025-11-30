@@ -8,6 +8,7 @@ interface PollOption {
   option_text: string;
   votes: number;
   is_correct: boolean;
+  voters: string[];
 }
 
 interface PollQuestionProps {
@@ -20,9 +21,24 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
   const [options, setOptions] = useState<PollOption[]>([]);
   const [userVote, setUserVote] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [userName, setUserName] = useState("");
 
+  // Ask for name once per question
+  useEffect(() => {
+    const key = `poll_username_q${questionId}`;
+    let stored = localStorage.getItem(key);
+
+    if (!stored) {
+      stored = prompt("Enter your name:") || "Anonymous";
+      localStorage.setItem(key, stored);
+    }
+
+    setUserName(stored);
+  }, [questionId]);
+
+  // Fetch poll state
   const fetchPoll = useCallback(async () => {
-    // get the question
+    // Question
     const { data: qData } = await supabase
       .from("poll_questions")
       .select("*")
@@ -31,104 +47,157 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
 
     if (qData) setQuestion(qData.question_text);
 
-    // get options
-    const { data: oData } = await supabase
+    // Options
+    const { data: optionsData } = await supabase
       .from("poll_options")
       .select("*")
       .eq("question_id", questionId)
       .order("id");
 
-    if (oData) setOptions(oData);
+    // Votes w/ names
+    const { data: votesData } = await supabase
+      .from("poll_votes")
+      .select("*")
+      .eq("question_id", questionId);
 
-    // user vote
-    const { data: vData } = await supabase
+    const mergedOptions =
+      optionsData?.map((opt: any) => ({
+        ...opt,
+        voters: votesData
+          ?.filter((v) => v.option_id === opt.id)
+          .map((v) => v.user_name) ?? [],
+      })) ?? [];
+
+    setOptions(mergedOptions);
+
+    // This user's vote
+    const { data: myVote } = await supabase
       .from("poll_votes")
       .select("*")
       .eq("question_id", questionId)
       .eq("user_id", userId)
       .maybeSingle();
 
-    if (vData) setUserVote(vData.option_id);
+    if (myVote) setUserVote(myVote.option_id);
   }, [questionId, userId]);
 
-  // Realtime updates
+  // Realtime listener for poll_votes
   useEffect(() => {
-    fetchPoll();
+  fetchPoll();
 
-    const channel = supabase
+  const channel = supabase
     .channel(`poll-${questionId}`)
     .on(
-        "postgres_changes",
-        {
-        event: "UPDATE",
+      "postgres_changes",
+      {
+        event: "*",
         schema: "public",
-        table: "poll_options",
-        },
-        (payload) => {
-        const updated = payload.new as PollOption;
-
-        // Only apply updates for this question
-        if (updated.question_id !== questionId) return;
-
-        setOptions((prev) =>
-            prev.map((o) => (o.id === updated.id ? updated : o))
-        );
-        }
+        table: "poll_votes",
+      },
+      () => {
+        fetchPoll(); // Refresh UI on any vote change
+      }
     )
     .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [questionId, fetchPoll]);
+  // CLEANUP — must NOT be async
+  return () => {
+    supabase.removeChannel(channel); // safe sync call
+  };
+}, [fetchPoll, questionId]);
 
+  // Voting logic
   const handleVote = async (option: PollOption) => {
     setFeedback(option.is_correct ? "Correct!" : "Incorrect — try again!");
 
-    if (userVote === option.id) return;
+    // Clicking the same option again → remove vote
+    if (userVote === option.id) {
+      await supabase
+        .from("poll_votes")
+        .delete()
+        .eq("question_id", questionId)
+        .eq("user_id", userId);
 
-    // decrement old
+      await supabase.rpc("decrement_vote", { option_id: option.id });
+
+      setUserVote(null);
+      await fetchPoll();
+      return;
+    }
+
+    // Remove any previous vote
+    await supabase.rpc("remove_previous_vote_for_user", {
+      in_user_id: userId,
+      in_question_id: questionId,
+    });
+
     if (userVote) {
       await supabase.rpc("decrement_vote", { option_id: userVote });
     }
 
-    // increment new
-    await supabase.rpc("increment_vote", { option_id: option.id });
-
-    // update poll_votes
-    await supabase.from("poll_votes").upsert({
-      question_id: questionId,
+    // Insert new vote WITH name
+    await supabase.from("poll_votes").insert({
       user_id: userId,
+      user_name: userName,
+      question_id: questionId,
       option_id: option.id,
     });
 
+    // Increment new option
+    await supabase.rpc("increment_vote", { option_id: option.id });
+
     setUserVote(option.id);
+    await fetchPoll();
   };
 
+  const totalVotes = options.reduce((sum, o) => sum + o.votes, 0);
+
   return (
-    <div className="poll-container">
+    <div className="poll-wrapper">
       <h3 className="poll-question">{question}</h3>
 
-      <div className="poll-options-grid">
-        {options.map((option) => {
-          const isChosen = userVote === option.id;
+      <div className="poll-options">
+        {options.map((opt) => {
+          const percent =
+            totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
+          const isChosen = opt.id === userVote;
 
           return (
             <div
-              key={option.id}
-              className={`poll-option-card ${isChosen ? "selected" : ""}`}
-              onClick={() => handleVote(option)}
+              key={opt.id}
+              className={`poll-card ${isChosen ? "selected" : ""}`}
+              onClick={() => handleVote(opt)}
             >
-              <p className="option-text">{option.option_text}</p>
-              <p className="option-votes">{option.votes} votes</p>
+              <div className="poll-top">
+                <p className="poll-text">{opt.option_text}</p>
+
+                <p className="poll-percent">
+                  {percent}% ({opt.votes} votes)
+                </p>
+              </div>
+
+              <div className="poll-bar">
+                <div
+                  className="poll-bar-fill"
+                  style={{ width: `${percent}%` }}
+                ></div>
+              </div>
+
+              {opt.voters.length > 0 && (
+                <div className="poll-voters">
+                  <strong>Chosen by:</strong> {opt.voters.join(", ")}
+                </div>
+              )}
+
+              {isChosen && (
+                <p className="your-vote">✓ Your vote ({userName})</p>
+              )}
             </div>
           );
         })}
       </div>
 
-      {feedback && (
-        <p className="poll-feedback">{feedback}</p>
-      )}
+      {feedback && <p className="poll-feedback">{feedback}</p>}
     </div>
   );
 };
