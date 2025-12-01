@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TypingText from "../components/TypingText";
 import "./Home.css";
+import { Link } from "react-router-dom";
 
 const topics = [
   {
@@ -65,9 +66,9 @@ function Home() {
               {isOpen && (
                 <div className="bubble-content">
                   <p>{topic.summary}</p>
-                  <a className="learn-btn" href={topic.link}>
-                    Learn More →
-                  </a>
+                  <Link className="learn-btn" to={topic.link}>
+                  Learn More →
+                  </Link>
                 </div>
               )}
             </div>

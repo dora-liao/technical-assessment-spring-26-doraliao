@@ -1,15 +1,16 @@
 import "./NavBar.css";
+import { Link } from "react-router-dom";
 
-function Navbar({ setPage }) {
+function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-links">
-        <span className="nav-link" onClick={() => setPage("home")}>Home</span>
-        <span className="nav-link" onClick={() => setPage("pcr")}>PCR</span>
-        <span className="nav-link" onClick={() => setPage("gel")}>Gel Electrophoresis</span>
-        <span className="nav-link" onClick={() => setPage("seq")}>DNA Sequencing</span>
-        <span className="nav-link" onClick={() => setPage("cloning")}>Cloning</span>
-        <span className="nav-link" onClick={() => setPage("crispr")}>CRISPR</span>
+        <Link className="nav-link" to="/">Home</Link>
+        <Link className="nav-link" to="/Pcr">PCR</Link>
+        <Link className="nav-link" to="/Gel">Gel Electrophoresis</Link>
+        <Link className="nav-link" to="/Seq">DNA Sequencing</Link>
+        <Link className="nav-link" to="/Cloning">Cloning</Link>
+        <Link className="nav-link" to="/Crispr">CRISPR</Link>
       </div>
     </nav>
   );

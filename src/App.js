@@ -1,5 +1,5 @@
-import './App.css';
-import { useState } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import { ReactComponent as Background } from "./Vector.svg";
@@ -24,51 +24,56 @@ function getOrCreateUserId() {
 }
 
 function App() {
-  const [page, setPage] = useState("home");
   const userId = getOrCreateUserId();
 
-  const pages = {
-    home: <Home userId={userId} />,
-    pcr: <Pcr userId={userId} />,
-    gel: <Gel userId={userId} />,
-    crispr: <Crispr userId={userId} />,
-    cloning: <Cloning userId={userId} />,
-    seq: <Seq userId={userId} />,
-  };
-
   const virusPositions = [
-  { top: "-15%", left: "25%" },
-  { top: "-10%", left: "80%" },
-  { top: "-5%", left: "-10%" },
-  { top: "0%", left: "55%" },
-  { top: "5%", left: "0%" },
-  { top: "10%", left: "50%" },
-  { top: "15%", left: "70%" },
-  { top: "20%", left: "95%" },
-  { top: "30%", left: "30%" },
-  { top: "45%", left: "65%" },
-];
+    { top: "-15%", left: "25%" },
+    { top: "-10%", left: "80%" },
+    { top: "-5%", left: "-10%" },
+    { top: "0%", left: "55%" },
+    { top: "5%", left: "0%" },
+    { top: "10%", left: "50%" },
+    { top: "15%", left: "70%" },
+    { top: "20%", left: "95%" },
+    { top: "30%", left: "30%" },
+    { top: "45%", left: "65%" },
+  ];
 
   return (
-    <div className="app-background">
-      <Background className="bg-svg left" />
-      <Background className="bg-svg center" />
-      <Background className="bg-svg right" />
+    <Router>
+      <div className="app-background">
+        
+        {/* Background SVGs */}
+        <Background className="bg-svg left" />
+        <Background className="bg-svg center" />
+        <Background className="bg-svg right" />
 
-      {virusPositions.map((pos, idx) => (
-        <Virus
-          key={idx}
-          className="virus-svg"
-          style={{ top: pos.top, left: pos.left }}
-        />
-      ))}
+        {/* Floating Viruses */}
+        {virusPositions.map((pos, idx) => (
+          <Virus
+            key={idx}
+            className="virus-svg"
+            style={{ top: pos.top, left: pos.left }}
+          />
+        ))}
 
-      <NavBar setPage={setPage} />
-      {pages[page]}
-      <Footer />
-    </div>
+        {/* NavBar should contain <Link> components now */}
+        <NavBar />
+
+        {/* Route Pages */}
+        <Routes>
+          <Route path="/" element={<Home userId={userId} />} />
+          <Route path="/Pcr" element={<Pcr userId={userId} />} />
+          <Route path="/Seq" element={<Seq userId={userId} />} />
+          <Route path="/Crispr" element={<Crispr userId={userId} />} />
+          <Route path="/Cloning" element={<Cloning userId={userId} />} />
+          <Route path="/Gel" element={<Gel userId={userId} />} />
+        </Routes>
+
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
 export default App;
-
