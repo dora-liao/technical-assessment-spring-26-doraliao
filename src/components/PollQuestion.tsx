@@ -28,13 +28,14 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
     const key = `poll_username_q${questionId}`;
     let stored = localStorage.getItem(key);
 
-    if (!stored) {
-      stored = prompt("Enter your name:") || "Anonymous";
-      localStorage.setItem(key, stored);
-    }
+  if (!stored) {
+    stored = prompt("Enter your name:") || "Anonymous";
+    localStorage.setItem(key, stored);
+  }
 
-    setUserName(stored);
-  }, [questionId]);
+  setUserName(stored);
+}, [questionId]);
+
 
   // Fetch poll state
   const fetchPoll = useCallback(async () => {
@@ -63,10 +64,15 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
     const mergedOptions =
       optionsData?.map((opt: any) => ({
         ...opt,
-        voters: votesData
-          ?.filter((v) => v.option_id === opt.id)
-          .map((v) => v.user_name) ?? [],
+        voters: Array.from(
+          new Set(
+            votesData
+              ?.filter((v) => v.option_id === opt.id)
+              .map((v) => v.user_name)
+          )
+        ),
       })) ?? [];
+
 
     setOptions(mergedOptions);
 
@@ -107,48 +113,49 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
 }, [fetchPoll, questionId]);
 
   // Voting logic
-  const handleVote = async (option: PollOption) => {
-    setFeedback(option.is_correct ? "Correct!" : "Incorrect — try again!");
+  // Voting logic
+const handleVote = async (option: PollOption) => {
+  setFeedback(option.is_correct ? "Correct!" : "Incorrect — try again!");
 
-    // Clicking the same option again → remove vote
-    if (userVote === option.id) {
-      await supabase
-        .from("poll_votes")
-        .delete()
-        .eq("question_id", questionId)
-        .eq("user_id", userId);
+  // Clicking the same option again → remove vote
+  if (userVote === option.id) {
+    await supabase
+      .from("poll_votes")
+      .delete()
+      .eq("question_id", questionId)
+      .eq("user_id", userId);
 
-      await supabase.rpc("decrement_vote", { option_id: option.id });
+    await supabase.rpc("decrement_vote", { option_id: option.id });
 
-      setUserVote(null);
-      await fetchPoll();
-      return;
-    }
-
-    // Remove any previous vote
-    await supabase.rpc("remove_previous_vote_for_user", {
-      in_user_id: userId,
-      in_question_id: questionId,
-    });
-
-    if (userVote) {
-      await supabase.rpc("decrement_vote", { option_id: userVote });
-    }
-
-    // Insert new vote WITH name
-    await supabase.from("poll_votes").insert({
-      user_id: userId,
-      user_name: userName,
-      question_id: questionId,
-      option_id: option.id,
-    });
-
-    // Increment new option
-    await supabase.rpc("increment_vote", { option_id: option.id });
-
-    setUserVote(option.id);
+    setUserVote(null);
     await fetchPoll();
-  };
+    return;
+  }
+
+  // Remove any previous vote
+  await supabase.rpc("remove_previous_vote_for_user", {
+    in_user_id: userId,
+    in_question_id: questionId,
+  });
+
+  if (userVote) {
+    await supabase.rpc("decrement_vote", { option_id: userVote });
+  }
+
+  // Insert new vote WITH name
+  await supabase.from("poll_votes").insert({
+    user_id: userId,
+    user_name: userName,
+    question_id: questionId,
+    option_id: option.id,
+  });
+
+  // Increment new option
+  await supabase.rpc("increment_vote", { option_id: option.id });
+
+  setUserVote(option.id);
+  await fetchPoll();
+};
 
   const totalVotes = options.reduce((sum, o) => sum + o.votes, 0);
 
