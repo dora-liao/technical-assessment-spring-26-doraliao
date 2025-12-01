@@ -11,6 +11,7 @@ import Cloning from "./pages/Cloning";
 import Seq from "./pages/Seq";
 import Gel from "./pages/Gel";
 import Crispr from "./pages/Crispr";
+import MatchGame from "./pages/MatchGame";
 
 import Footer from "./components/Footer";
 
@@ -68,6 +69,7 @@ function App() {
           <Route path="/Crispr" element={<Crispr userId={userId} />} />
           <Route path="/Cloning" element={<Cloning userId={userId} />} />
           <Route path="/Gel" element={<Gel userId={userId} />} />
+          <Route path="/MatchGame" element={<MatchGame />} />
         </Routes>
 
         <Footer />
