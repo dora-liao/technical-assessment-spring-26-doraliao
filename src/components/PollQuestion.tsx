@@ -25,17 +25,16 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
 
   // Ask for name once per question
   useEffect(() => {
-    const key = `poll_username_q${questionId}`;
-    let stored = localStorage.getItem(key);
+  const stored = localStorage.getItem("poll_global_username");
 
   if (!stored) {
-    stored = prompt("Enter your name:") || "Anonymous";
-    localStorage.setItem(key, stored);
+    const name = prompt("Enter your name:") || "Anonymous";
+    localStorage.setItem("poll_global_username", name);
+    setUserName(name);
+  } else {
+    setUserName(stored);
   }
-
-  setUserName(stored);
-}, [questionId]);
-
+  }, []);
 
   // Fetch poll state
   const fetchPoll = useCallback(async () => {

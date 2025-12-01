@@ -12,6 +12,8 @@ import Seq from "./pages/Seq";
 import Gel from "./pages/Gel";
 import Crispr from "./pages/Crispr";
 
+import Footer from "./components/Footer";
+
 function getOrCreateUserId() {
   let uid = localStorage.getItem("user_id");
   if (!uid) {
@@ -63,6 +65,7 @@ function App() {
 
       <NavBar setPage={setPage} />
       {pages[page]}
+      <Footer />
     </div>
   );
 }
