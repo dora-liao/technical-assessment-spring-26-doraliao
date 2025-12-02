@@ -165,3 +165,40 @@
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0px); }
 }
+
+.quiz-section {
+  margin-top: 3rem;
+  text-align: center;
+  font-family: 'Anaheim', sans-serif;
+}
+
+.quiz-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: #000;
+}
+
+.quiz-button {
+  background: #3a6bff;
+  color: white;
+  border: none;
+  padding: 0.9rem 1.7rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  font-family: 'Anaheim', sans-serif;
+  text-decoration: none;
+}
+
+.quiz-button:hover {
+  background: #2b54d6;
+  transform: translateY(-3px);
+}
+
+.quiz-button:active {
+  transform: translateY(-1px);
+}
+

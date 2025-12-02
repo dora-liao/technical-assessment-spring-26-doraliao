@@ -87,6 +87,15 @@ function Home() {
           );
         })}
       </div>
+      <div className="quiz-section">
+        <p className="quiz-text">
+          Ready to test your knowledge? Play the matching game!
+        </p>
+
+        <Link className="quiz-button" to="/MatchGame">
+          Go to Matching Game
+        </Link>
+      </div>
     </div>
   );
 }
