@@ -135,3 +135,39 @@
   backdrop-filter: blur(6px);
   border-top: 1px solid #ddd;
 }
+
+.hover-reveal {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.hover-word {
+  color: #3a6bff;         /* 🔵 blue word */
+  font-weight: 600;        /* optional emphasis */
+}
+
+/* overlay that appears on hover */
+.overlay-reveal {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  z-index: 20;
+}
+
+.hover-reveal:hover .overlay-reveal {
+  opacity: 1;
+  transform: translateY(-8px);
+}

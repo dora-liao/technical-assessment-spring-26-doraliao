@@ -19,9 +19,15 @@ export default function Pcr({ userId }) {
           <strong>Denaturation:</strong> The double-stranded DNA is heated to separate it into two single strands.
         </li>
         <li>
-          <strong>Annealing:</strong> Short DNA oligos called primers bind to the specific regions of the DNA that need to be copied. 
-          These primers act like starting points for DNA synthesis. Two primers (forward and reverse) are required to flank the desired DNA fragment.
-        </li>
+        <strong>Annealing:</strong> Short DNA{" "}
+        <span className="hover-reveal">
+          <span className="hover-word">oligos</span>
+          <span className="overlay-reveal">
+            short, single-stranded synthetic sequences of DNA or RNA
+          </span>
+        </span>{" "}
+        called primers bind to the specific regions of the DNA that need to be copied.
+      </li>
         <li>
           <strong>Elongation:</strong> A heat-stable DNA polymerase enzyme builds new DNA strands by adding nucleotides (dNTPs) to the primers, effectively copying the target segment.
         </li>
