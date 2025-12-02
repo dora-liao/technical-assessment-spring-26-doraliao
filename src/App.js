@@ -33,7 +33,7 @@ function App() {
     { top: "-5%", left: "-10%" },
     { top: "0%", left: "55%" },
     { top: "5%", left: "0%" },
-    { top: "10%", left: "50%" },
+    { top: "10%", left: "20%" },
     { top: "15%", left: "70%" },
     { top: "20%", left: "95%" },
     { top: "30%", left: "30%" },

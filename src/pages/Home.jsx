@@ -3,6 +3,12 @@ import TypingText from "../components/TypingText";
 import "./Home.css";
 import { Link } from "react-router-dom";
 
+import pcrImg from "../pcr_updated.avif";
+import seqImg from "../seq.png";
+import crisprImg from "../crispr.webp";
+import cloningImg from "../cloning.png";
+import gelImg from "../gel.png";
+
 const topics = [
   {
     id: "pcr",
@@ -10,6 +16,7 @@ const topics = [
     summary:
       "PCR amplifies specific DNA fragments, creating millions of copies through thermal cycling. It is essential for diagnostics, cloning, and genetic analysis.",
     link: "/pcr",
+    img: pcrImg,
   },
   {
     id: "seq",
@@ -17,6 +24,7 @@ const topics = [
     summary:
       "Sequencing reveals the order of nucleotides in DNA. Sanger, NGS, and nanopore sequencing methods are common for studying mutations, disease, and genome structure.",
     link: "/seq",
+    img: seqImg,
   },
   {
     id: "crispr",
@@ -24,6 +32,7 @@ const topics = [
     summary:
       "CRISPR uses guide RNA and a protein called Cas9 to edit DNA with precision. Originating from bacterial immunity, it is now a fundamental technology for genetic engineering and therapeutic research.",
     link: "/crispr",
+    img: crisprImg,
   },
   {
     id: "cloning",
@@ -31,6 +40,7 @@ const topics = [
     summary:
       "Molecular cloning inserts genes into plasmids to replicate them in host cells. It enables protein production, gene studies, and synthetic biology circuits.",
     link: "/cloning",
+    img: cloningImg,
   },
   {
     id: "gel",
@@ -38,6 +48,7 @@ const topics = [
     summary:
       "Gel electrophoresis separates DNA fragments by size under an electric field, producing band patterns used to verify experiments and analyze genetic material.",
     link: "/gel",
+    img: gelImg,
   },
 ];
 
@@ -65,9 +76,10 @@ function Home() {
 
               {isOpen && (
                 <div className="bubble-content">
+                  <img src={topic.img} alt={topic.title} className="bubble-image" />
                   <p>{topic.summary}</p>
                   <Link className="learn-btn" to={topic.link}>
-                  Learn More →
+                    Learn More →
                   </Link>
                 </div>
               )}
