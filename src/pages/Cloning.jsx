@@ -7,8 +7,21 @@ export default function Cloning({ userId }) {
       <h1>Molecular Cloning & Gene Circuit Design</h1>
 
       <p>
-        Molecular cloning is a technique that allows scientists to copy and manipulate genes of interest. 
-        It involves inserting a specific DNA fragment into a circular DNA molecule called a plasmid, 
+        <span className="hover-reveal">
+        <span className="hover-word">Molecular cloning</span>
+        <img
+          src={require("../cloning-diagram.png")}
+          alt="Cloning Diagram"
+          className="overlay-image"
+        />
+      </span> is a technique that allows scientists to copy and manipulate genes of interest. 
+        It involves inserting a specific DNA fragment into a small circular DNA molecule called a {" "}
+        <span className="hover-reveal">
+          <span className="hover-word">plasmid</span>
+          <span className="overlay-reveal">
+            plasmids can replicate independently of the cell's main chromosome
+          </span>
+        </span>{""}, 
         which is then introduced into bacteria or other host cells. 
         As the host cells replicate, they produce many copies of the target gene. 
         This method is widely used to study gene function, produce clinally-relevant proteins such as insulin, 
@@ -16,11 +29,43 @@ export default function Cloning({ userId }) {
       </p>
 
       <p>
-        Gene circuit design builds on molecular cloning by arranging multiple genes, regulatory elements, and selection markers
-        into synthetic networks that control gene expression in a predictable way. 
-        In the lab, this process typically involves designing DNA sequences on a computer, assembling them using cloning techniques, and inserting them into host cells. 
-        Scientists then test how the circuit behaves in vitro, often using fluorescent proteins like GFP or other reporter genes to visualize activity. 
-        For example, a simple gene circuit might turn a cell green in response to a specific chemical, allowing researchers to see how genes interact and respond to environmental signals experimentally.
+        Gene circuit design builds on molecular cloning by arranging multiple genes, {" "}
+        <span className="hover-reveal">
+          <span className="hover-word">regulatory elements</span>
+          <span className="overlay-reveal">
+            regulates when, where, and how much a gene is transcribed
+          </span>
+        </span>{""}, and {" "}
+        <span className="hover-reveal">
+          <span className="hover-word">selection markers</span>
+          <span className="overlay-reveal">
+            identifies cells that have successfully incorporated foreign DNA
+          </span>
+        </span>{" "}
+        into <span className="hover-reveal">
+        <span className="hover-word">synthetic networks</span>
+        <img
+          src={require("../plasmid-map.png")}
+          alt="Plasmid Map"
+          className="overlay-image"
+        />
+      </span> that control gene expression in a predictable way. 
+        In the lab, this process typically involves designing DNA sequences on a computer, assembling them using {" "}
+        <span className="hover-reveal">
+          <span className="hover-word">cloning techniques</span>
+          <span className="overlay-reveal">
+            Gibson Assembly and Golden Gate cloning are common techniques
+          </span>
+        </span>{""}, and inserting them into host cells. 
+        Scientists then test how the circuit behaves in vitro, often using fluorescent proteins like green fluorescent protein (GFP) or other reporter genes to visualize activity. 
+        For example, a simple gene circuit might <span className="hover-reveal">
+        <span className="hover-word">turn a cell green</span>
+        <img
+          src={require("../gfp.png")}
+          alt="Cells expressing GFP"
+          className="overlay-image"
+        />
+      </span> in response to a specific chemical, allowing researchers to see how genes interact and respond to environmental signals experimentally.
       </p>
 
       <p>
