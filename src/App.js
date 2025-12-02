@@ -44,12 +44,10 @@ function App() {
     <Router>
       <div className="app-background">
         
-        {/* Background SVGs */}
         <Background className="bg-svg left" />
         <Background className="bg-svg center" />
         <Background className="bg-svg right" />
 
-        {/* Floating Viruses */}
         {virusPositions.map((pos, idx) => (
           <Virus
             key={idx}
@@ -58,10 +56,8 @@ function App() {
           />
         ))}
 
-        {/* NavBar should contain <Link> components now */}
         <NavBar />
 
-        {/* Route Pages */}
         <Routes>
           <Route path="/" element={<Home userId={userId} />} />
           <Route path="/Pcr" element={<Pcr userId={userId} />} />

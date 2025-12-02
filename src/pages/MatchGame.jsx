@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./MatchGame.css";
+import CommentSection from "../components/CommentSection";
 
 const cardsData = [
   // PCR
@@ -69,7 +70,6 @@ export default function MatchGame() {
 
   // Win condition
   useEffect(() => {
-  // Ensure no duplicates and exact count
     const uniqueMatches = new Set(matched);
     if (uniqueMatches.size === cardsData.length) {
         setHasWon(true);
@@ -115,6 +115,7 @@ export default function MatchGame() {
       <button className="reset-btn" onClick={resetGame}>
         Reset Game
       </button>
+      <CommentSection page="match" />
     </div>
   );
 }

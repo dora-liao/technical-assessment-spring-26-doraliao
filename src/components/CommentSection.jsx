@@ -35,16 +35,16 @@ export default function CommentSection({ page }) {
 
     if (error) console.error("Error posting comment:", error);
     else {
-      setComments([data[0], ...comments]); // add new comment to top
+      setComments([data[0], ...comments]);
       setUsername("");
       setNewComment("");
     }
   };
 
-  // Format timestamp nicely
+  // Format timestamp
   const formatTimestamp = (ts) => {
     const date = new Date(ts);
-    return date.toLocaleString(); // e.g., "11/26/2025, 8:20:15 PM"
+    return date.toLocaleString();
   };
 
   return (

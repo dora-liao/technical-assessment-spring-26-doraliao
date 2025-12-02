@@ -23,7 +23,7 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
 
-  // Ask for name once per question
+  // Ask for name once
   useEffect(() => {
   const stored = localStorage.getItem("poll_global_username");
 
@@ -36,7 +36,6 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
   }
   }, []);
 
-  // Fetch poll state
   const fetchPoll = useCallback(async () => {
     // Question
     const { data: qData } = await supabase
@@ -54,7 +53,7 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
       .eq("question_id", questionId)
       .order("id");
 
-    // Votes w/ names
+    // Votes with names
     const { data: votesData } = await supabase
       .from("poll_votes")
       .select("*")
@@ -75,7 +74,7 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
 
     setOptions(mergedOptions);
 
-    // This user's vote
+    // The user's vote
     const { data: myVote } = await supabase
       .from("poll_votes")
       .select("*")
@@ -105,18 +104,15 @@ const PollQuestion: React.FC<PollQuestionProps> = ({ questionId, userId }) => {
     )
     .subscribe();
 
-  // CLEANUP — must NOT be async
   return () => {
-    supabase.removeChannel(channel); // safe sync call
+    supabase.removeChannel(channel);
   };
 }, [fetchPoll, questionId]);
 
   // Voting logic
-  // Voting logic
 const handleVote = async (option: PollOption) => {
   setFeedback(option.is_correct ? "Correct!" : "Incorrect — try again!");
 
-  // Clicking the same option again → remove vote
   if (userVote === option.id) {
     await supabase
       .from("poll_votes")
@@ -141,7 +137,7 @@ const handleVote = async (option: PollOption) => {
     await supabase.rpc("decrement_vote", { option_id: userVote });
   }
 
-  // Insert new vote WITH name
+  // Insert new vote
   await supabase.from("poll_votes").insert({
     user_id: userId,
     user_name: userName,
@@ -149,7 +145,6 @@ const handleVote = async (option: PollOption) => {
     option_id: option.id,
   });
 
-  // Increment new option
   await supabase.rpc("increment_vote", { option_id: option.id });
 
   setUserVote(option.id);

@@ -57,9 +57,9 @@ function Home() {
 
   return (
     <div className="home-container">
-      <TypingText text="Molecular Biology 101" className="home-title" />
+      <TypingText text="Gel With It" className="home-title" />
       <p className="home-subtitle">
-        Click a bubble to learn the basics of five core molecular biology techniques.
+        Click a bubble to learn the basics of five core molecular biology techniques!
       </p>
 
      <div className="carousel">
