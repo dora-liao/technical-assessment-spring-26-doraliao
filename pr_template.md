@@ -20,13 +20,21 @@ Please check off which features you have implemented:
 nimble-alfajores-376232.netlify.app
 
 ## Screen Recording 
-**Link**: [paste it here]
+**Link**: https://drive.google.com/file/d/1lsi05A8zLYUNICWNJICpcyLJidLl_FNs/view?usp=sharing
 
 ## Written Portion
 1. **How did the project go? What parts of it did you most enjoy / find yourself good at?**
 
-[answer here]
+I definitely learned a lot from this project! As a biomedical engineering major, I've never done anything
+like this, so this seemed like a tall task. When I first read the instructions, I was unsure how to approach
+implementing both the front end and the back end. I researched tools quite a bit - I used Supabase for the
+first time, deployed a website for the first time, and learned so much about React. I'm happy that my final
+product is functional and is what I had envisioned for the most part. I really enjoyed playing around with the 
+CSS and animating the components!
 
 2. **Was this technical assessment what you expected? If you had another two weeks to work on it, what would you add or change?**
 
-[answer here]
+Yes, I'd say so - I knew this technical assessment was going to be challenging, especially considering I've never
+developed a website from scratch by myself before. I'm very happy that I got some time over the past week to focus
+on skill building in coding though. If I had another two weeks to work on it, I would make the UI even more engaging,
+add more molecular biology techniques, add more detail to the five I have right now, add animations to better explain all of the concepts, and incorporate more knowledge check games.
