@@ -3,6 +3,7 @@
 
 .App {
   text-align: center;
+  color: purple;
 }
 
 .App-logo {
@@ -32,7 +33,6 @@
   min-height: 100vh;
   width: 100vw;
   overflow: hidden;
-  color: rgba(180, 116, 240, 0.25)
 }
 
 .bg-svg {
